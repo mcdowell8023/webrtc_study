@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音视频采集-拍照</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"></script>
+</head>
+
+<body>
+  <h1> 判断设备 并进行拍照 </h1>
+  <video autoplay style="width:100%"></video>
+  <div id="app">
+    <h3>默认</h3>
+    <p v-for="str in deviceArr">{{str}}</p>
+    <h3>设备选择</h3>
+    <div v-for="(itemJson,name) in deviceJson" :key="name">
+      <div v-for="(devices,type) in itemJson">
+        <h4>{{name}}-{{type}}</h4>
+        <select @change="(e)=>select(e,{deviceType:name,type})">
+          <option v-for="(device) in devices" :value="device.deviceId" :name="device.label">{{device.label}}</option>
+        </select>
+      </div>
+    </div>
+    <hr />
+    <button style="padding:  10px 20px;" @click="changePlayer">确认切换</button>
+  </div>
+
+  <!-- <audio autoplay></audio> -->
+
+
+  <br />
+  <!-- <button click="clickCamera"> 拍照 </button>
+  <canvas id="camera"></canvas> -->
+  <script src="./client.js"></script>
+</body>
+
+</html>

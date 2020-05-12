@@ -1,0 +1,41 @@
+<!--
+ * @Author: mcdowell
+ * @Date: 2020-05-11 16:00:59
+ * @LastEditors: mcdowell
+ * @LastEditTime: 2020-05-11 17:38:51
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试目录指引</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <h1>测试目录指引</h1>
+    <ol>
+      <li v-for="index in 10"><a :href="`/demo/test${index}/index.html`">test{{index}}</a>
+        <a :href="`/doc/note${index}.md`" target="_blank"> doc{{index}} </a></li>
+    </ol>
+  </div>
+
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        catalogList: 10
+      },
+      methods: {
+
+      },
+      created: function () {
+      },
+    })
+  </script>
+</body>
+
+</html>
