@@ -24,3 +24,14 @@
   - I 帧：**关键帧**。压缩率低，可以单独解码成一幅完整的图像。
   - P 帧：**参考帧**。压缩率较高，解码时依赖于前面已解码的数据。
   - B 帧：**前后参考帧**。压缩率最高，解码时不光依赖前面已经解码的帧，而且还依赖它后面的 P 帧。换句话说就是，B 帧后面的 P 帧要优先于它进行解码，然后才能将 B 帧解码。
+
+> 从播放器里获取的视频帧一定是非编码帧。也就是说，拍照的过程其实是从连续播放的一幅幅画面中抽取正在显示的那张画面
+
+## 借助 canvas 进行拍照
+
+1. 借助 cancas drawImage 绘制 video 中的视频流 : `picture.getContext('2d').drawImage(video, 0, 0, picture.width, picture.height);`
+   - image：可以是一幅图片，或 HTMLVideoElement。
+   - dx, dy：图片起点的 x、y 坐标。
+   - dWidth：图片的宽度。
+   - dHeight：图片的高度
+2. 通过 Canvas 的 toDataURL 方法获得图片的 URL 地址:`picture.toDataURL("image/jpeg")`,在使用 a 标签等 进行下载

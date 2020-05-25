@@ -1,0 +1,108 @@
+<!--
+ * @Author: mcdowell
+ * @Date: 2020-05-25 13:57:56
+ * @LastEditors: mcdowell
+ * @LastEditTime: 2020-05-25 19:36:23
+-->
+<html>
+
+<head>
+  <title>WebRTC 进行本地录制</title>
+  <style>
+    video {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <video autoplay playsinline id="player"></video>
+  <hr />
+
+  <div>
+    <button id="record">Start Record</button>
+    <button id="stop">stop Record</button>
+
+    <button id="recplay">Play</button>
+    <button id="download">Download</button>
+    <p id="state"></p>
+    <hr />
+    <video id="recvideo"></video>
+  </div>
+  <script>
+    window.onload = function () {
+      var buffer = [];
+      document.querySelector('#record').onclick = function () {
+        buffer = [];
+        console.log('开始录制')
+        var options = {
+          mimeType: 'video/webm;codecs=vp8'
+
+        }
+        // 判断浏览器是否支持录制
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+          console.error(`${options.mimeType} is not supported!`);
+          return;
+        }
+        var stream = document.querySelector('#player').srcObject;
+        try {
+          webrtcRecorder = new MediaRecorder(stream, options)
+
+        } catch (error) {
+          console.error('Failed to create MediaRecorder:', error);
+          return;
+        }
+        // 当有音视频数据来了之后触发该事件
+        webrtcRecorder.ondataavailable = handleDataAvailable;
+        // 开始录制 非常有必要设置 分段参数，见效失败几率
+        webrtcRecorder.start(10);
+        // 这个方法调用时可以通过给timeslice参数设置一个毫秒值,如果设置这个毫秒值,那么录制的媒体会按照你设置的值进行分割成一个个单独的区块, 而不是以默认的方式录制一个非常大的整块内容.
+      }
+      document.querySelector('#stop').onclick = function () {
+        // 判断浏览器是否支持录制
+        webrtcRecorder && webrtcRecorder.stop()
+        console.log(buffer, '结束后返回的流')
+        downLoadRecorder(buffer)
+        // 停止录制. 同时触发dataavailable事件,返回一个存储Blob内容的录制数据.之后不再记录
+      }
+      document.querySelector('#recplay').onclick = function () {
+        var blob = new Blob(buffer, { type: 'video/webm' });
+        recvideo.src = window.URL.createObjectURL(blob);
+        recvideo.srcObject = null;
+        recvideo.controls = true;
+        recvideo.play();
+      }
+      document.querySelector('#download').onclick = function () {
+        downLoadRecorder(buffer)
+      };
+      function downLoadRecorder(buffer) {
+        var blob = new Blob(buffer, { type: 'video/webm' });
+        downLoad(window.URL.createObjectURL(blob))
+      }
+
+      // 对数据进行存储
+      function handleDataAvailable(e) {
+        console.log(webrtcRecorder.state, '录制状态')
+        // console.log(e, 'handleDataAvailable')
+        if (e && e.data && e.data.size > 0) {
+          buffer.push(e.data);
+        }
+      }
+
+      function downLoad(url) {
+        var oA = document.createElement("a");
+        oA.download = 'photo';// 设置下载的文件名，默认是'下载'
+        oA.href = url;
+        document.body.appendChild(oA);
+        oA.click();
+        oA.remove(); // 下载之后把创建的元素删除
+      }
+    }
+
+
+
+  </script>
+  <script src="./client.js"></script>
+</body>
+
+</html>

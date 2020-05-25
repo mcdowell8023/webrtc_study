@@ -1,0 +1,117 @@
+<!--
+ * @Author: mcdowell
+ * @Date: 2020-05-25 13:57:56
+ * @LastEditors: mcdowell
+ * @LastEditTime: 2020-05-25 15:26:38
+-->
+<html>
+
+<head>
+  <title>WebRTC 进行图片拍照</title>
+  <script src="./filterCanvas.js"></script>
+  <style>
+    video {
+      width: 100%;
+    }
+
+    /* 滤镜样式 此种方式仅仅是给 cavas 显示效果 加上了滤镜，如果需要是图片本身 有滤镜，需要处理数据 filterCanvas.js */
+    .none {
+      -webkit-filter: none;
+    }
+
+    /* blur：模糊度*/
+    .blur {
+      -webkit-filter: blur(3px);
+    }
+
+    /* grayscale：灰度（黑白）*/
+    .grayscale {
+      -webkit-filter: grayscale(1);
+    }
+
+    /* invert：反转*/
+    .invert {
+      -webkit-filter: invert(1);
+    }
+
+    /* sepia：深褐色 */
+    .sepia {
+      -webkit-filter: sepia(1);
+    }
+  </style>
+</head>
+
+<body>
+  <video autoplay playsinline id="player"></video>
+  <hr />
+
+  <div>
+    滤镜：
+    <select id="filter">
+      <option value="none">None</option>
+      <option value="blur">blur</option>
+      <option value="grayscale">Grayscale</option>
+      <option value="invert">Invert</option>
+      <option value="sepia">sepia</option>
+    </select>
+    <button style="padding:  10px 20px;" id="clickPhoto">拍照</button>
+    <button style="padding:  10px 20px;" id="save">下载</button>
+    <hr />
+    <canvas id="picture"></canvas>
+  </div>
+  <script>
+    window.onload = function () {
+      // 增加滤镜
+
+      document.querySelector('#filter').onchange = function () {
+        var picture = document.querySelector('canvas#picture');
+        picture.className = this.value;
+      }
+
+      // 拍照
+      document.querySelector('#clickPhoto').onclick = function getPhoto() {
+        var video = document.querySelector('video#player');
+        var picture = document.querySelector('canvas#picture');
+        picture.width = video.offsetWidth;
+        picture.height = video.offsetHeight;
+        var canvasContext = picture.getContext('2d');
+        canvasContext.drawImage(video, 0, 0, picture.width, picture.height);
+
+        // 此方法 可以 使下载的 照片中 也同样包含滤镜效果 具体看 filterCanvas.js
+        copy7(canvasContext, picture.width, picture.height)
+
+        /* 
+        image：可以是一幅图片，或 HTMLVideoElement。
+        dx, dy：图片起点的 x、y 坐标。
+        dWidth：图片的宽度。
+        dHeight：图片的高度。
+        */
+        // void ctx.drawImage(image, dx, dy, dWidth, dHeight);
+      }
+
+      // 下载 
+      document.querySelector('#save').onclick = function () {
+        var picture = document.querySelector('canvas#picture');
+        // 通过 Canvas 的 toDataURL 方法获得图片的 URL 地址
+        var url = picture.toDataURL("image/jpeg");
+        // 进行下载
+        downLoad(url)
+      }
+
+      function downLoad(url) {
+        var oA = document.createElement("a");
+        oA.download = 'photo';// 设置下载的文件名，默认是'下载'
+        oA.href = url;
+        document.body.appendChild(oA);
+        oA.click();
+        oA.remove(); // 下载之后把创建的元素删除
+      }
+    }
+
+
+
+  </script>
+  <script src="./client.js"></script>
+</body>
+
+</html>
