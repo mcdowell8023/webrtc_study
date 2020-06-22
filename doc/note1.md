@@ -15,6 +15,8 @@
 - 一个 STUN/TURN 服务器
   - STUN/TURN 服务器，负责获取 WebRTC 终端在公网的 IP 地址，以及 NAT 穿越失败后的数据中转
 
+[WebRTC 介绍及简单应用](https://www.cnblogs.com/vipzhou/p/7994927.html)
+
 #### WebRTC 进行音视频通话的大体过程
 
 1. WebRTC 终端 A 进入房间之前，它首先会检测自己的设备是否可用。如果此时设备可用，则进行**音视频数据采集**

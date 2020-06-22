@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=640, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var RTCPeerConnection =
+      window.RTCPeerConnection || window.webkitRTCPeerConnection;
+    var pc = new RTCPeerConnection(null);
+    // pc.createOffer(function (sessionDescription) {
+    //   console.log(sessionDescription, 'sessionDescription--成功', sessionDescription.sdp)
+    // }, function (error) {
+    //   console.log(error, '---报错')
+    // })
+    let pc_offer = null
+    pc.createOffer()
+      .then(function (offer) {
+        console.log(offer, 'offer')
+        pc_offer = pc.setLocalDescription(offer)
+        return pc_offer
+      })
+      .then(function () {
+        console.log('通过信令服务来发送', pc_offer);
+        // Send the offer to the remote peer using the signaling server
+      })
+      .catch((reportError) => {
+        console.log(reportError, 'reportError--报错')
+      })
+
+  </script>
+</body>
+
+</html>
