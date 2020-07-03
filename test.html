@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button>1</button>
+  <button>2</button>
+  <button>3</button>
+  <script>
+    var oBtns = document.querySelectorAll('button')
+    // for (var i = 0; i < oBtns.length; i++) {
+    //   // 方式 1
+    //   // (function (i) {
+    //   //   oBtns[i].onclick = function () {
+    //   //     console.log(i)
+    //   //   }
+    //   // })(i)
+    //   // 方式 2
+    //   oBtns[i].index=i
+    //   oBtns[i].onclick=function(){
+    //     console.log(this.index)
+    //   }
+    // }
+    // 方式 3
+    for (let i = 0; i < oBtns.length; i++) {
+      oBtns[i].onclick=function(){
+        console.log(i)
+      }
+    }
+
+
+  </script>
+</body>
+
+</html>
